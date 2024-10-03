@@ -365,7 +365,7 @@ func validateAgainstAllFirmwareRules(ruleToCheck corefw.FirmwareRule, existingRu
 				return xcommon.NewXconfError(http.StatusBadRequest, rule.GetName()+": Name is already used")
 
 			}
-			if ru.EqualComplexRules(*ruleToCheck.GetRule(), *rule.GetRule()) {
+			if ru.EqualComplexRules(ruleToCheck.GetRule(), rule.GetRule()) {
 				return xcommon.NewXconfError(http.StatusConflict, "Rule has duplicate: "+rule.GetName())
 			}
 		}

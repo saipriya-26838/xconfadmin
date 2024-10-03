@@ -2,7 +2,7 @@ module xconfadmin
 
 go 1.17
 
-replace xconfwebconfig => github.com/rdkcentral/xconfwebconfig v0.0.0-20240118143553-da5931521976
+replace xconfwebconfig => github.com/rdkcentral/xconfwebconfig v0.0.0-20241003093644-a17cc4b37f0f
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1

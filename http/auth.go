@@ -32,6 +32,7 @@ const (
 	AUTHORIZATION = "Authorization"
 	AUTH_TOKEN    = "token"
 	AUTH_SUBJECT  = "X-Auth-Subject"
+	RequestID     = "X-Request-ID"
 	UNKNOWN_USER  = "UNKNOWN_USER"
 
 	KeysBaseURL = "https://sat-sample-url.net"

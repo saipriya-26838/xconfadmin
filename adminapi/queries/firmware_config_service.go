@@ -303,7 +303,7 @@ func CreateFirmwareConfigAS(config *coreef.FirmwareConfig, appType string, valid
 	}
 	if validateName {
 		err = config.ValidateName()
-		if err != nil {
+		if err != xwcommon.NotFound && err != nil {
 			return xwhttp.NewResponseEntity(http.StatusConflict, err, nil)
 		}
 	}
@@ -409,7 +409,7 @@ func beforeDeletingFirmwareConfig(id string, appType string) *xwhttp.ResponseEnt
 
 	// Check for usage in FirmwareRule
 	rules, err := corefw.GetFirmwareRuleAllAsListDB()
-	if err != nil {
+	if err != nil && err.Error() != xcommon.NotFound.Error() {
 		return xwhttp.NewResponseEntity(http.StatusInternalServerError, fmt.Errorf("Get FirmwareRules to check Referential Integrity while deleting %s failed", id), nil)
 	}
 	for _, rule := range rules {

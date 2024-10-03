@@ -186,7 +186,7 @@ func validateAll(entity *xwlogupload.TelemetryTwoRule, existingEntities []*xwlog
 		if rule.Name == entity.Name {
 			return xcommon.NewXconfError(http.StatusConflict, "Name is already used")
 		}
-		if ru.EqualComplexRules(rule.Rule, entity.Rule) {
+		if ru.EqualComplexRules(&rule.Rule, &entity.Rule) {
 			return xcommon.NewXconfError(http.StatusConflict, "Rule has duplicate: "+rule.Name)
 		}
 	}

@@ -42,7 +42,7 @@ func WebServerInjection(ws *xhttp.WebconfigServer, xc *dataapi.XconfConfigs) {
 		xcommon.AllowedNumberOfFeatures = 100
 		xcommon.ActiveAuthProfiles = "dev"
 		xcommon.DefaultAuthProfiles = "prod"
-		xcommon.SatOn = true
+		xcommon.SatOn = false
 		xcommon.IpMacIsConditionLimit = 20
 	} else {
 		xwcommon.CacheUpdateWindowSize = ws.XW_XconfServer.ServerConfig.GetInt64("xconfwebconfig.xconf.cache_update_window_size")

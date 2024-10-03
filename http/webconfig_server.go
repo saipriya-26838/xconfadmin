@@ -22,11 +22,12 @@ import (
 	"net/http"
 	"strings"
 
-	xcommon "xconfadmin/common"
 	"xconfwebconfig/common"
 	xhttp "xconfwebconfig/http"
 
 	"xconfwebconfig/db"
+
+	xcommon "xconfadmin/common"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -84,14 +85,14 @@ func (s *WebconfigServer) AuthValidationMiddleware(next http.Handler) http.Handl
 				return
 			} else {
 				r.Header.Set(AUTH_SUBJECT, LoginToken.Subject)
-
 				// Add Login token & permissions to request context
 				ctx = context.WithValue(ctx, CTX_KEY_TOKEN, LoginToken)
 				permissions := getPermissionsFromLoginToken(LoginToken)
 				ctx = context.WithValue(ctx, CTX_KEY_PERMISSIONS, permissions)
 			}
-		} else if !xcommon.SatOn {
-			log.Debug("Skipping validation...")
+		} else if r.Header.Get(RequestID) != "adminui" && !xcommon.SatOn {
+			//allowing api request without sat_token if sat is off
+			log.Debug("SAT is off, allowing request without SAT token")
 		} else {
 			http.Error(w, "auth token not found", http.StatusUnauthorized)
 			return
