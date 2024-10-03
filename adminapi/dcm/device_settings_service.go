@@ -142,8 +142,8 @@ func DeviceSettingsValidate(ds *logupload.DeviceSettings) *xwhttp.ResponseEntity
 		return xwhttp.NewResponseEntity(http.StatusBadRequest, errors.New("Schedule Type is empty"), nil)
 	}
 
-	twm := schedule.TimeWindowMinutes
-	if twm < 0 {
+	twm, err := schedule.TimeWindowMinutes.Int64()
+	if err != nil || twm < 0 {
 		return xwhttp.NewResponseEntity(http.StatusBadRequest, errors.New("Schedule TimeWindowMinutes is invalid"), nil)
 	}
 

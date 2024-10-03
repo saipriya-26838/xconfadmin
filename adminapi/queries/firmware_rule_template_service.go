@@ -18,7 +18,6 @@
 package queries
 
 import (
-	"encoding/json"
 	"fmt"
 	"math"
 	"sort"
@@ -222,7 +221,7 @@ func validateAgainstFirmwareRTs(frt *corefw.FirmwareRuleTemplate, entities []*co
 		if frt.GetName() == rule.GetName() {
 			return xcommon.NewXconfError(http.StatusConflict, rule.GetName()+" is already used")
 		}
-		if ruleutil.EqualComplexRules(*frt.GetRule(), *rule.GetRule()) {
+		if ruleutil.EqualComplexRules(frt.GetRule(), rule.GetRule()) {
 			return xcommon.NewXconfError(http.StatusConflict, "Rule is duplicate of "+rule.ID)
 		}
 	}
@@ -472,12 +471,8 @@ func CreateFirmwareRuleTemplates() {
 
 	for _, template := range templateList {
 		template.Updated = xutil.GetTimestamp(time.Now().UTC())
-		if jsonData, err := json.Marshal(template); err != nil {
+		if err := ds.GetCachedSimpleDao().SetOne(ds.TABLE_FIRMWARE_RULE_TEMPLATE, template.ID, &template); err != nil {
 			panic(err)
-		} else {
-			if err := ds.GetSimpleDao().SetOne(ds.TABLE_FIRMWARE_RULE_TEMPLATE, template.ID, jsonData); err != nil {
-				panic(err)
-			}
 		}
 	}
 }

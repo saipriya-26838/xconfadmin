@@ -25,6 +25,8 @@ import (
 	"strings"
 	"time"
 
+	xhttp "xconfadmin/http"
+	"xconfwebconfig/common"
 	xwhttp "xconfwebconfig/http"
 	ru "xconfwebconfig/rulesengine"
 
@@ -115,23 +117,23 @@ func UpdateModel(model *shared.Model) *xwhttp.ResponseEntity {
 	return xwhttp.NewResponseEntity(http.StatusOK, nil, env)
 }
 
-func DeleteModel(id string) *xwhttp.ResponseEntity {
+func DeleteModel(id string) *xhttp.ResponseEntity {
 	err := validateUsageForModel(id)
 	if err != nil {
-		return xwhttp.NewResponseEntity(http.StatusOK, err, id)
+		return xhttp.NewResponseEntity(err, id)
 	}
 
 	existingModel := shared.GetOneModel(id)
 	if existingModel == nil {
-		return xwhttp.NewResponseEntity(http.StatusNotFound, errors.New("Entity with id: "+id+" does not exist"), id)
+		return xhttp.NewResponseEntityWithStatus(http.StatusNotFound, errors.New("Entity with id: "+id+" does not exist"), id)
 	}
 
 	err = shared.DeleteOneModel(id)
 	if err != nil {
-		return xwhttp.NewResponseEntity(http.StatusInternalServerError, err, id)
+		return xhttp.NewResponseEntityWithStatus(http.StatusInternalServerError, err, id)
 	}
 
-	return xwhttp.NewResponseEntity(http.StatusNoContent, nil, id)
+	return xhttp.NewResponseEntityWithStatus(http.StatusNoContent, nil, id)
 }
 
 // Return usage info if Model is used by a rule, empty string otherwise
@@ -166,7 +168,7 @@ func validateUsageForModel(modelId string) error {
 
 	// Check for usage in FirmwareConfig
 	list, err := coreef.GetFirmwareConfigAsListDB()
-	if err != nil {
+	if err != nil && err.Error() != common.NotFound.Error() {
 		return xcommon.NewXconfError(http.StatusInternalServerError, err.Error())
 	}
 

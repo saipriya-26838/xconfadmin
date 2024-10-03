@@ -20,7 +20,7 @@ A configuration file can be passed as an argument when the application starts. c
 ```shell
 mkdir -p /app/logs/xconfadmin
 cd .../xconfadmin
-bin/xconfadmin-linux-amd64 -f config/sample_xconfwebconfig.conf
+bin/xconfadmin-linux-amd64 -f config/sample_xconfadmin.conf
 ```
 
 ```shell

@@ -139,7 +139,7 @@ func PostFirmwareRuleFilteredHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get all sorted rules
 	dbrules, err := firmware.GetFirmwareRuleAllAsListDB()
-	if err != nil {
+	if err != common.NotFound && err != nil {
 		xhttp.WriteAdminErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -489,7 +489,7 @@ func duplicateFrFound(entity *firmware.FirmwareRule, nameMap map[string][]*firmw
 				if item.ID == entity.ID || item.ApplicationType != entity.ApplicationType {
 					continue
 				}
-				if re.EqualComplexRules(*item.GetRule(), *entity.GetRule()) {
+				if re.EqualComplexRules(item.GetRule(), entity.GetRule()) {
 					return errors.New("Estb Rule " + entity.Name + " is duplicate of rule for " + item.Name)
 				}
 			}
@@ -503,7 +503,7 @@ func duplicateFrFound(entity *firmware.FirmwareRule, nameMap map[string][]*firmw
 			if item.ID == entity.ID || item.ApplicationType != entity.ApplicationType {
 				continue
 			}
-			if re.EqualComplexRules(*item.GetRule(), *entity.GetRule()) {
+			if re.EqualComplexRules(item.GetRule(), entity.GetRule()) {
 				return errors.New("Rule " + entity.Name + " is duplicate of rule for " + item.Name)
 			}
 		}

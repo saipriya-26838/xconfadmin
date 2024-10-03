@@ -44,6 +44,30 @@ const (
 	TYPE_415 = "UnsupportedMediaTypeException"
 )
 
+type ResponseEntity struct {
+	Status int
+	Error  error
+	Data   interface{}
+}
+
+func NewResponseEntity(err error, data interface{}) *ResponseEntity {
+	status := common.GetXconfErrorStatusCode(err)
+	return &ResponseEntity{
+		Status: status,
+		Error:  err,
+		Data:   data,
+	}
+}
+
+// TODO drop this function when we're done converting from NewResponseEntityWithStatus to NewResponseEntity
+func NewResponseEntityWithStatus(status int, err error, data interface{}) *ResponseEntity {
+	return &ResponseEntity{
+		Status: status,
+		Error:  err,
+		Data:   data,
+	}
+}
+
 func AdminError(w http.ResponseWriter, err error) {
 	status := xcommon.GetXconfErrorStatusCode(err)
 	WriteAdminErrorResponse(w, status, err.Error())

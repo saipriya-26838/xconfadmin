@@ -61,6 +61,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// if SAT is off and database password is not encrypted, set the key to a test value
+	if !sc.Config.GetBoolean("xconfwebconfig.sat.SAT_ON") && sc.Config.GetString("xconfwebconfig.database.encrypted_password") == "" {
+		os.Setenv("SAT_KEY", "dGVzdFhwY0tleQo=")
+		os.Setenv("SAT_CLIENT_ID", "testXconfClientId")
+		os.Setenv("SAT_CLIENT_SECRET", "dGVzdFhwY0tleQo=")
+	}
+
 	server := xhttp.NewWebconfigServer(sc, false, nil)
 
 	// setup logging
